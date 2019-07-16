@@ -1,7 +1,9 @@
 package com.satodai.demo.encryptiondemo.domain.service;
 
-import org.springframework.stereotype.Service;
+import com.satodai.demo.encryptiondemo.domain.model.EncryptJwt;
+import com.satodai.demo.encryptiondemo.domain.model.Jwt;
 
-@Service
-public class EncryptService {
+public interface EncryptService<E extends EncryptJwt> {
+
+    E serialize(Jwt jwt);
 }

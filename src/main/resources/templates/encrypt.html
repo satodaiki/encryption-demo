@@ -8,15 +8,44 @@
     <script th:src="@{/webjars/bootstrap/3.3.7-1/js/bootstrap.min.js}"></script>
     <!-- jQuery -->
     <script th:src="@{/webjars/jquery/3.3.1/bootstrap.min.js}"></script>
-    <!-- CSS -->
-    <link th:href="@{/css/home.css}" rel="stylesheet"></link>
 
     <title>Encrypt Demo</title>
 </head>
 <body>
 <div class="container">
-    <form method="POST" th:action="@{encrypt}" th:object="">
-    </form>
+    <div class="container">
+        <h1>JWTの情報を入力してください</h1>
+        <form method="POST" th:action="@{/encrypt}" th:object="${jwtForm}">
+            <div class="form-group">
+                <label for="jwt_header">ヘッダー部</label>
+                <textarea id="jwt_header" class="form-control" th:field="*{header}" />
+            </div>
+            <div class="form-group">
+                <label for="jwt_payload">ペイロード部</label>
+                <textarea id="jwt_payload" class="form-control" th:field="*{payload}" />
+            </div>
+            <button type="submit" class="btn btn-primary">送信</button>
+        </form>
+    </div>
+    <br/>
+    <br/>
+    <div class="container"
+         th:if="${!#strings.isEmpty(rsaEncryptJwt?.jwt?.signature)}"
+         th:object="${rsaEncryptJwt}">
+        <h1>JWT発行結果</h1>
+        <div class="form-group">
+            <label for="jwt_private_key">秘密鍵</label>
+            <textarea id="jwt_private_key" class="form-control" th:field="*{privateKey}" />
+        </div>
+        <div class="form-group">
+            <label for="jwt_public_key">公開鍵</label>
+            <textarea id="jwt_public_key" class="form-control" th:field="*{publicKey}" />
+        </div>
+        <div class="form-group">
+            <label for="jwt_str">暗号化JWT</label>
+            <textarea id="jwt_str" class="form-control" th:field="*{jwtStr}" />
+        </div>
+    </div>
 </div>
 </body>
 </html>
