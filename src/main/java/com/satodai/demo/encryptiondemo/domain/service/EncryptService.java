@@ -47,8 +47,8 @@ public class EncryptService {
         RSAPrivateKey privateKey = (RSAPrivateKey) kp.getPrivate();
 
         // 16進数文字列に変換し格納
-        encryptJwt.setPublicKey(DatatypeConverter.printHexBinary(publicKey.getEncoded()).toLowerCase());
-        encryptJwt.setPrivateKey(DatatypeConverter.printHexBinary(privateKey.getEncoded()).toLowerCase());
+        encryptJwt.setPublicKey(rsaEncryptUtil.encodeHexString(publicKey));
+        encryptJwt.setPrivateKey(rsaEncryptUtil.encodeHexString(privateKey));
 
         // 署名付与とJWTオブジェクトへの格納
         JWSObject jwsObject = rsaEncryptUtil.makeSignature(jwt.getHeader(), jwt.getPayload(), privateKey);
@@ -61,20 +61,14 @@ public class EncryptService {
 
     public boolean validRsaEncryptJwt(RsaEncryptJwt rsaEncryptJwt)
             throws NoSuchAlgorithmException, InvalidKeySpecException, ParseException, JOSEException {
-
-        // 公開鍵を16進数文字列からbyte配列へ変換
-        byte[] publicKeyBytes = DatatypeConverter.parseHexBinary(rsaEncryptJwt.getPublicKey());
-
-        // PrivateKeyへ変換
-        // https://codeday.me/jp/qa/20190215/265026.html
-        KeyFactory kf = KeyFactory.getInstance("RSA");
-        RSAPublicKey publicKey = (RSAPublicKey) kf.generatePublic(new X509EncodedKeySpec(publicKeyBytes));
+        RSAPublicKey publicKey = rsaEncryptUtil.encodePublicKey(rsaEncryptJwt.getPublicKey());
 
         // 署名検証の実施
         boolean result = rsaEncryptUtil.validSignature(rsaEncryptJwt.getJwtStr(), publicKey);
 
         JWSObject jwsObject = JWSObject.parse(rsaEncryptJwt.getJwtStr());
 
+        // フォームの設定ここでしちゃう
         Jwt jwt = new Jwt();
         jwt.setHeader(jwsObject.getHeader().toJSONObject().toJSONString());
         jwt.setPayload(jwsObject.getPayload().toJSONObject().toJSONString());
