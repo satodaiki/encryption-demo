@@ -1,15 +1,15 @@
-# Getting Started
+## 概要
 
-### Reference Documentation
-For further reference, please consider the following sections:
+JWTの検証デモ
 
-* [Official Apache Maven documentation](https://maven.apache.org/guides/index.html)
+## 手順
 
-### Guides
-The following guides illustrate how to use some features concretely:
-
-* [Building a RESTful Web Service](https://spring.io/guides/gs/rest-service/)
-* [Serving Web Content with Spring MVC](https://spring.io/guides/gs/serving-web-content/)
-* [Building REST services with Spring](https://spring.io/guides/tutorials/bookmarks/)
-* [Handling Form Submission](https://spring.io/guides/gs/handling-form-submission/)
-
+1. 起動する
+2. ブラウザで`http://localhost:8080`を起動する
+3. 表示されている「ヘッダー部」と「ペイロード部」のそれぞれにJWT形式のJSONを貼り付ける<br/>
+例：<br/>
+ヘッダー部：{"alg":"RS256"}<br/>
+ペイロード部：{"sub":"1234567890","name":"John Doe","iat":1516239022}
+4. 署名発行ボタン押すと秘密鍵と公開鍵と署名付きJWTが表示される
+5. 署名検証ボタンを押すと`4.`で表示された公開鍵と署名付きJWTを元に署名の検証を行う
+6. 検証結果が良ければ「結果オッケーだよ」と表示される、だめなら「署名だめだよ」と表示される

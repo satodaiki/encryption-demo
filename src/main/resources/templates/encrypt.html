@@ -15,7 +15,7 @@
 <div class="container">
     <div class="container">
         <h1>JWTの情報を入力してください</h1>
-        <form method="POST" th:action="@{/encrypt}" th:object="${jwtForm}">
+        <form method="POST" th:action="@{encrypt}" th:object="${jwtForm}">
             <div class="form-group">
                 <label for="jwt_header">ヘッダー部</label>
                 <textarea id="jwt_header" class="form-control" th:field="*{header}" />
@@ -24,27 +24,37 @@
                 <label for="jwt_payload">ペイロード部</label>
                 <textarea id="jwt_payload" class="form-control" th:field="*{payload}" />
             </div>
-            <button type="submit" class="btn btn-primary">送信</button>
+            <button type="submit" class="btn btn-primary">署名発行</button>
         </form>
     </div>
     <br/>
     <br/>
     <div class="container"
-         th:if="${!#strings.isEmpty(rsaEncryptJwt?.jwt?.signature)}"
-         th:object="${rsaEncryptJwt}">
+         th:if="${!#strings.isEmpty(rsaEncryptJwt?.jwt?.signature)}">
         <h1>JWT発行結果</h1>
-        <div class="form-group">
-            <label for="jwt_private_key">秘密鍵</label>
-            <textarea id="jwt_private_key" class="form-control" th:field="*{privateKey}" />
-        </div>
-        <div class="form-group">
-            <label for="jwt_public_key">公開鍵</label>
-            <textarea id="jwt_public_key" class="form-control" th:field="*{publicKey}" />
-        </div>
-        <div class="form-group">
-            <label for="jwt_str">暗号化JWT</label>
-            <textarea id="jwt_str" class="form-control" th:field="*{jwtStr}" />
-        </div>
+        <form method="POST" th:action="@{decrypt}" th:object="${rsaEncryptJwt}">
+            <div class="form-group">
+                <label for="jwt_private_key">秘密鍵</label>
+                <textarea id="jwt_private_key" class="form-control" th:field="*{privateKey}" />
+            </div>
+            <div class="form-group">
+                <label for="jwt_public_key">公開鍵</label>
+                <textarea id="jwt_public_key" class="form-control" th:field="*{publicKey}" />
+            </div>
+            <div class="form-group">
+                <label for="jwt_str">暗号化JWT</label>
+                <textarea id="jwt_str" class="form-control" th:field="*{jwtStr}" />
+            </div>
+            <button type="submit" class="btn btn-primary">署名検証</button>
+        </form>
+    </div>
+    <br/>
+    <br/>
+    <div class="container" th:if="!${signatureVerify}">
+        <span>署名だめだよ</span>
+    </div>
+    <div class="container" th:if="${signatureVerify}">
+        <span>検証オーケーだよ</span>
     </div>
 </div>
 </body>
