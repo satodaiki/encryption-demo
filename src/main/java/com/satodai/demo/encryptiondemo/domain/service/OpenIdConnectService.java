@@ -21,16 +21,16 @@ public class OpenIdConnectService {
     public URI makeAuthorizationRequest() throws URISyntaxException {
 
         // The authorisation endpoint of the server
-        URI authzEndpoint = new URI("https://c2id.com/authz");
+        URI authzEndpoint = new URI(openIdConnectGoogleProperties.getAuthorizationUri());
 
         // The client identifier provisioned by the server
-        ClientID clientID = new ClientID("123");
+        ClientID clientID = new ClientID(openIdConnectGoogleProperties.getClientId());
 
         // The requested scope values for the token
-        Scope scope = new Scope("read", "write");
+        Scope scope = new Scope(openIdConnectGoogleProperties.getScope());
 
         // The client callback URI, typically pre-registered with the server
-        URI callback = new URI("https://client.com/callback");
+        URI callback = new URI(openIdConnectGoogleProperties.getRedirectUri());
 
         // Generate random state string for pairing the response to the request
         State state = new State();
